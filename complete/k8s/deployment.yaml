@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-boot-k8s-deployment
+  labels:
+    app: spring-boot-k8s
+spec:
+  selector:
+    matchLabels:
+      app: spring-boot-k8s
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: spring-boot-k8s
+    spec:
+      containers:
+      - image: ccr.ccs.tencentyun.com/qianmi/gs-spring-boot-docker:0.1.0
+        imagePullPolicy: IfNotPresent
+        name: spring-boot-k8s
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 0.2
+            memory: 200Mi
+      imagePullSecrets:
+      - name: qcloudregistrykey
+      - name: tencenthubkey
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-boot-k8s-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: spring-boot-k8s
+  # k8s 1.7+
+  externalTrafficPolicy: Local
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+    protocol: TCP
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: spring-boot-k8s-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 10m
+    nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+    # For nginx-ingress controller < 0.9.0.beta-18
+    ingress.kubernetes.io/ssl-redirect: "true"
+    ingress.kubernetes.io/proxy-body-size: 10m
+    ingress.kubernetes.io/proxy-request-buffering: "off"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: spring-boot-k8s-service
+          servicePort: 80
+    host: sbk.dev.bm001.com
