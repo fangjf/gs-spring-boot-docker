@@ -50,26 +50,26 @@ spec:
     targetPort: 8080
     protocol: TCP
 
-#---
-#
-#apiVersion: extensions/v1beta1
-#kind: Ingress
-#metadata:
-#  name: spring-boot-k8s-ingress
-#  annotations:
-#    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-#    nginx.ingress.kubernetes.io/proxy-body-size: 10m
-#    nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
-#    # For nginx-ingress controller < 0.9.0.beta-18
-#    ingress.kubernetes.io/ssl-redirect: "true"
-#    ingress.kubernetes.io/proxy-body-size: 10m
-#    ingress.kubernetes.io/proxy-request-buffering: "off"
-#spec:
-#  rules:
-#  - http:
-#      paths:
-#      - path: /
-#        backend:
-#          serviceName: spring-boot-k8s-service
-#          servicePort: 80
-#    host: sbk.dev.bm001.com
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: spring-boot-k8s-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 10m
+    nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+    # For nginx-ingress controller < 0.9.0.beta-18
+    ingress.kubernetes.io/ssl-redirect: "true"
+    ingress.kubernetes.io/proxy-body-size: 10m
+    ingress.kubernetes.io/proxy-request-buffering: "off"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: spring-boot-k8s-service
+          servicePort: 80
+    host: sbk.dev.bm001.com
