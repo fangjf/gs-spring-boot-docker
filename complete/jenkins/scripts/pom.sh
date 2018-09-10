@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-set -x
-ARTIFACTID=`mvn help:evaluate -Dexpression=project.artifactId | grep "^[^\[]"`
-set +x
+export ARTIFACTID=`mvn help:evaluate -Dexpression=project.artifactId | grep "^[^\[]"`
 
-set -x
-VERSION=`mvn help:evaluate -Dexpression=project.version | grep "^[^\[]"`
-set +x
+export VERSION=`mvn help:evaluate -Dexpression=project.version | grep "^[^\[]"`
+
+envsubst < k8s/deployment.yaml.tmpl > k8s/deployment.yaml
