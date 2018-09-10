@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 set -x
 ARTIFACTID=`mvn help:evaluate -Dexpression=project.artifactId | grep "^[^\[]"`
 set +x
